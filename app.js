@@ -32,7 +32,7 @@ document.getElementById("get-location").addEventListener("click", () => {
       "Geolocalización no es soportada en este navegador.";
   }
 });
-
+/*
 // Registro del Service Worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(() => {
@@ -40,4 +40,5 @@ if ('serviceWorker' in navigator) {
   }).catch((error) => {
     console.error("Error al registrar el Service Worker:", error);
   });
+  */
 }
