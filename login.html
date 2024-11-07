@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Fotos a AWS S3</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Subir Fotos a AWS S3</h1>
+        <button id="amazon-sign-in">Iniciar sesión con Amazon</button>
+        <button id="google-sign-in">Iniciar sesión con Google</button>
+        <button id="apple-sign-in">Iniciar sesión con Apple</button>
+        
+        <div id="upload-section" style="display:none;">
+            <input type="file" id="file-input" accept="image/*">
+            <button id="upload-button">Subir a S3</button>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
