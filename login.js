@@ -1,9 +1,8 @@
-// Cargamos AWS Amplify desde el CDN
-const Amplify = window.amplify;
-const { Auth, Storage } = Amplify.default;
+// AWS Amplify está disponible globalmente desde el CDN como `Amplify`
+const { Auth, Storage } = Amplify;
 
 // Configuración de Amplify
-Amplify.default.configure({
+Amplify.configure({
     Auth: {
         region: 'REGION', // Región de AWS (ej. 'us-east-1')
         userPoolId: 'USER_POOL_ID', // ID del User Pool de Cognito
