@@ -1,27 +1,29 @@
-import Amplify, { Auth, Storage } from 'aws-amplify';
+// Cargamos AWS Amplify desde el CDN
+const Amplify = window.amplify;
+const { Auth, Storage } = Amplify.default;
 
 // Configuración de Amplify
-Amplify.configure({
+Amplify.default.configure({
     Auth: {
-        region: 'REGION',
-        userPoolId: 'USER_POOL_ID',
-        userPoolWebClientId: 'APP_CLIENT_ID',
+        region: 'REGION', // Región de AWS (ej. 'us-east-1')
+        userPoolId: 'USER_POOL_ID', // ID del User Pool de Cognito
+        userPoolWebClientId: 'APP_CLIENT_ID', // ID de Cliente de Cognito
         oauth: {
-            domain: 'YOUR_COGNITO_DOMAIN',
-            scope: ['email', 'openid', 'profile'],
-            redirectSignIn: 'http://localhost:3000/',
-            redirectSignOut: 'http://localhost:3000/',
-            responseType: 'code'
+            domain: 'YOUR_COGNITO_DOMAIN', // Dominio configurado en Cognito
+            scope: ['email', 'openid', 'profile'], // Alcances requeridos
+            redirectSignIn: 'http://yourdomain.com/', // URL de redirección al iniciar sesión
+            redirectSignOut: 'http://yourdomain.com/', // URL de redirección al cerrar sesión
+            responseType: 'code' // Tipo de respuesta OAuth2 (usualmente 'code')
         }
     },
     Storage: {
-        bucket: 'your-bucket-name',
-        region: 'REGION',
-        identityPoolId: 'IDENTITY_POOL_ID'
+        bucket: 'your-bucket-name', // Nombre del bucket S3
+        region: 'REGION', // Región del bucket S3
+        identityPoolId: 'IDENTITY_POOL_ID' // ID del Identity Pool de Cognito
     }
 });
 
-// Manejo de autenticación con Google, Amazon y Apple
+// Autenticación con Google
 document.getElementById("google-sign-in").addEventListener("click", async () => {
     try {
         await Auth.federatedSignIn({ provider: 'Google' });
@@ -30,6 +32,7 @@ document.getElementById("google-sign-in").addEventListener("click", async () => 
     }
 });
 
+// Autenticación con Amazon
 document.getElementById("amazon-sign-in").addEventListener("click", async () => {
     try {
         await Auth.federatedSignIn({ provider: 'LoginWithAmazon' });
@@ -38,6 +41,7 @@ document.getElementById("amazon-sign-in").addEventListener("click", async () => 
     }
 });
 
+// Autenticación con Apple
 document.getElementById("apple-sign-in").addEventListener("click", async () => {
     try {
         await Auth.federatedSignIn({ provider: 'SignInWithApple' });
@@ -52,6 +56,7 @@ document.getElementById("upload-button").addEventListener("click", async () => {
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         try {
+            // Subimos el archivo al bucket S3 configurado
             await Storage.put(file.name, file, {
                 contentType: file.type,
             });
@@ -64,3 +69,13 @@ document.getElementById("upload-button").addEventListener("click", async () => {
         alert("Por favor selecciona un archivo antes de subirlo");
     }
 });
+
+// Mostrar la sección de subida una vez autenticado
+Auth.currentAuthenticatedUser()
+    .then(user => {
+        document.getElementById("upload-section").style.display = "block";
+        console.log("Usuario autenticado: ", user.username);
+    })
+    .catch(() => {
+        console.log("No hay usuario autenticado actualmente");
+    });
